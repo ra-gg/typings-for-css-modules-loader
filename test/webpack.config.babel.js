@@ -1,3 +1,6 @@
+import { resolve } from 'path'
+const loaderPath = resolve('src/index.js')
+
 module.exports = {
   entry: './test/entry.ts',
   output: {
@@ -5,14 +8,14 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [
-      { test: /\.ts$/, loaders: ['babel', 'ts'] },
-      { test: /example\.css$/, loader: '../src/index.js?modules' },
-      { test: /example-camelcase\.css$/, loader: '../src/index.js?modules&camelCase' },
-      { test: /example-namedexport\.css$/, loader: '../src/index.js?modules&namedExport' },
-      { test: /example-camelcase-namedexport\.css$/, loader: '../src/index.js?modules&camelCase&namedExport' },
-      { test: /example-no-css-modules\.css$/, loader: '../src/index.js' },
-      { test: /example-compose\.css$/, loader: '../src/index.js?modules&camelCase&namedExport' }
+    rules: [
+      { test: /\.ts$/, loaders: ['babel-loader', { loader: 'ts-loader', options: { transpileOnly: true } } ] },
+      { test: /example\.css$/, loader: loaderPath, options: { modules: true } },
+      { test: /example-camelcase\.css$/, loader: loaderPath, options: { modules: true, camelCase: true } },
+      { test: /example-namedexport\.css$/, loader: loaderPath, options: { modules: true, namedExport: true } },
+      { test: /example-camelcase-namedexport\.css$/, loader: loaderPath, options: { modules: true, camelCase: true, namedExport: true } },
+      { test: /example-no-css-modules\.css$/, loader: loaderPath },
+      { test: /example-compose\.css$/, loader: loaderPath, options: { modules: true, camelCase: true, namedExport: true } }
     ]
   }
 };
